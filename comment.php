@@ -10,54 +10,30 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
     case "GET":
 
-        if (isset($_GET['user_id'])) {
-            $user_id_specific_user = $_GET['user_id'];
-            $sql = "SELECT * FROM post WHERE user_id = :user_id";
-        }
-
-        if (isset($_GET['post_id'])) {
-            $post_id = $_GET['post_id'];
-            $sql = "SELECT * FROM post WHERE post_id = :post_id";
-        }
-
-
-        if (!isset($_GET['user_id']) && !isset($_GET['post_id'])) {
-            $sql = "SELECT * FROM post INNER JOIN users ON post.user_id = users.user_id ORDER BY post_id DESC";
-        }
+        $sql = "SELECT * FROM comment ORDER BY post_id DESC";
 
 
         if (isset($sql)) {
             $stmt = $conn->prepare($sql);
 
-            if (isset($user_id_specific_user)) {
-                $stmt->bindParam(':user_id', $user_id_specific_user);
-            }
-
-            if (isset($post_id)) {
-                $stmt->bindParam(':post_id', $post_id);
-            }
-
             $stmt->execute();
-            $user_post = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $comment = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            echo json_encode($user_post);
+            echo json_encode($comment);
         }
 
 
         break;
 
     case "POST":
-        $user_post = json_decode(file_get_contents('php://input'));
-        $sql = "INSERT INTO post (user_id, post_context, post_image, post_isForSale, post_location, post_price, created_at) VALUES (:user_id, :post_context, :post_image, :post_isForSale, :post_location, :post_price, :created_at)";
+        $user_comment = json_decode(file_get_contents('php://input'));
+        $sql = "INSERT INTO comment (user_id, post_id, comment_content, created_at) VALUES (:user_id, :post_id, :comment_content, :created_at)";
         $stmt = $conn->prepare($sql);
 
         $created_at = date('Y-m-d H:i:s');
-        $stmt->bindParam(':user_id', $user_post->user_id);
-        $stmt->bindParam(':post_context', $user_post->post_context);
-        $stmt->bindParam(':post_image', $user_post->post_image);
-        $stmt->bindParam(':post_isForSale', $user_post->post_isForSale);
-        $stmt->bindParam(':post_location',  $user_post->post_location);
-        $stmt->bindParam(':post_price',  $user_post->post_price);
+        $stmt->bindParam(':user_id', $user_comment->user_id);
+        $stmt->bindParam(':comment_content', $user_comment->comment_content);
+        $stmt->bindParam(':post_id', $user_comment->post_id);
         $stmt->bindParam(':created_at',  $created_at);
 
 
