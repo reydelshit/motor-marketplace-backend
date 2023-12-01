@@ -71,46 +71,22 @@ switch ($method) {
         echo json_encode($response);
         break;
 
-    case "PUT":
-        $user_post = json_decode(file_get_contents('php://input'));
-        $sql = "UPDATE post SET post_context = :post_context, post_image = :post_image, post_isForSale = :post_isForSale, post_location = :post_location, post_price = :post_price WHERE post_id = :post_id";
-        $stmt = $conn->prepare($sql);
 
-        $stmt->bindParam(':post_id', $user_post->post_id);
-        $stmt->bindParam(':post_context', $user_post->post_context);
-        $stmt->bindParam(':post_image', $user_post->post_image);
-        $stmt->bindParam(':post_isForSale', $user_post->post_isForSale);
-        $stmt->bindParam(':post_location', $user_post->post_location);
-        $stmt->bindParam(':post_price', $user_post->post_price);
-
-        if ($stmt->execute()) {
-            $response = [
-                "status" => "success",
-                "message" => "post updated successfully"
-            ];
-        } else {
-            $response = [
-                "status" => "error",
-                "message" => "post update failed"
-            ];
-        }
-
-        break;
     case "DELETE":
-        $user_post = json_decode(file_get_contents('php://input'));
-        $sql = "DELETE FROM post WHERE post_id = :post_id";
+        $user_comment = json_decode(file_get_contents('php://input'));
+        $sql = "DELETE FROM comment WHERE comment_id = :comment_id";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':post_id', $user_post->post_id);
+        $stmt->bindParam(':comment_id', $user_comment->comment_id);
 
         if ($stmt->execute()) {
             $response = [
                 "status" => "success",
-                "message" => "user_post deleted successfully"
+                "message" => "user_comment deleted successfully"
             ];
         } else {
             $response = [
                 "status" => "error",
-                "message" => "user_post delete failed"
+                "message" => "user_comment delete failed"
             ];
         }
 

@@ -12,7 +12,7 @@ switch ($method) {
 
         if (isset($_GET['receiver_id'])) {
             $receiver_id = $_GET['receiver_id'];
-            $sql = "SELECT * FROM notification_message WHERE receiver_id = :receiver_id ORDER BY message_id DESC";
+            $sql = "SELECT * FROM notifications WHERE receiver_id = :receiver_id ORDER BY notification_id DESC";
         }
 
         if (isset($sql)) {
