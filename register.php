@@ -21,7 +21,7 @@ switch ($method) {
         $stmt->bindParam(':birthday', $user->birthday);
         $stmt->bindParam(':gender', $user->gender);
         $stmt->bindParam(':created_at', $created_at);
-        $stmt->bindParam(':gender', $user->address);
+        $stmt->bindParam(':address', $user->address);
 
 
         if ($stmt->execute()) {
@@ -41,19 +41,30 @@ switch ($method) {
 
     case "PUT":
         $user = json_decode(file_get_contents('php://input'));
-        $sql = "UPDATE users SET name= :name, email=:email, birthday=:birthday, image=:image, gender=:gender, updated_at=:updated_at WHERE id = :id";
+        $sql = "UPDATE users 
+                SET name = :name, 
+                    email = :email, 
+                    password = :password, 
+                    birthday = :birthday, 
+                    gender = :gender, 
+                    created_at = :created_at, 
+                    address = :address,
+                    profile_picture = :profile_picture
+                WHERE user_id = :user_id";
+
         $stmt = $conn->prepare($sql);
-        $updated_at = date('Y-m-d');
-        $stmt->bindParam(':id', $user->id);
+        $created_at = date('Y-m-d');
         $stmt->bindParam(':name', $user->name);
         $stmt->bindParam(':email', $user->email);
+        $stmt->bindParam(':password', $user->password);
         $stmt->bindParam(':birthday', $user->birthday);
-        $stmt->bindParam(':image', $user->image);
         $stmt->bindParam(':gender', $user->gender);
+        $stmt->bindParam(':created_at', $created_at);
+        $stmt->bindParam(':address', $user->address);
+        $stmt->bindParam(':user_id', $user->user_id);
+        $stmt->bindParam(':profile_picture', $user->profile_picture);
 
-        // $stmt->bindParam(':height', $user->height);
-        // $stmt->bindParam(':weight', $user->weight);
-        $stmt->bindParam(':updated_at', $updated_at);
+
 
         if ($stmt->execute()) {
 

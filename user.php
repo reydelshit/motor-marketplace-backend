@@ -33,9 +33,7 @@ switch ($method) {
             echo json_encode($product);
         }
 
-
         break;
-
 
 
 
