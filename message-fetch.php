@@ -44,7 +44,7 @@ switch ($method) {
             message ON users.user_id = message.sender_id 
                 AND ( ( message.receiver_id =  :receiver_id AND message.sender_id = :sender_id OR message.sender_id = :receiver_id AND message.receiver_id = :sender_id))
             WHERE 
-            users.user_id IN (1, 2)";
+            users.user_id IN (:receiver_id, :sender_id)";
 
         if (isset($sql)) {
             $stmt = $conn->prepare($sql);
